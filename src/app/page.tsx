@@ -1,9 +1,11 @@
-import { Button } from '@/components/ui/button'
+import { Chat } from '@/components/chat'
+import { InputForm } from '@/components/input-form'
 
 export default function Home() {
   return (
-    <div>
-      <Button>Click me</Button>
+    <div className="flex flex-col h-dvh w-full">
+      <Chat />
+      <InputForm />
     </div>
   )
 }
