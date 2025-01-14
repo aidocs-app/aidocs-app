@@ -1,7 +1,7 @@
 {
   "name": "aidocs-app",
-  "version": "0.1.0",
-  "private": true,
+  "description": "The web application for Aidocs, providing an intuitive chat app to interact with complex documents using AI.",
+  "version": "0.0.1",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -23,5 +23,13 @@
     "eslint": "^9",
     "eslint-config-next": "15.1.4",
     "@eslint/eslintrc": "^3"
-  }
+  },
+  "keywords": [
+    "aidocs",
+    "rag",
+    "ai",
+    "documentation"
+  ],
+  "author": "Lokeswaran Aruljothy",
+  "license": "Apache-2.0"
 }
