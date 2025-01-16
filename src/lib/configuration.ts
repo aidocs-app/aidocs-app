@@ -1,14 +1,13 @@
 'server only'
+
+import { validateEnvironment } from './env.schema'
+
+const env = validateEnvironment()
+
 export const configuration = {
-  langgraphApiUrl: process.env.NEXT_PUBLIC_LANGGRAPH_API_URL,
+  langgraphApiUrl: env?.NEXT_PUBLIC_LANGGRAPH_API_URL,
   langgraphId: 'agent',
   assistantName: 'assistant',
-}
-console.log(
-  '🚀 ~ export  configuration.process.env.NEXT_PUBLIC_LANGGRAPH_API_URL:',
-  process.env.NEXT_PUBLIC_LANGGRAPH_API_URL,
-  'configuration',
-  configuration.langgraphApiUrl
-)
+} as const
 
 export type ConfigurationType = typeof configuration
