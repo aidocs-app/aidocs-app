@@ -1,7 +1,9 @@
 import { cn } from '@/lib/utils'
-import { Message } from '@/types/message'
+import { useMessageStore } from '@/store/message'
+import { Message, ROLE } from '@/types/message'
 import Image from 'next/image'
 import { Markdown } from './markdown'
+import { MessageSkeleton } from './message-skeleton'
 
 type Props = {
   message: Message
@@ -9,7 +11,11 @@ type Props = {
 
 export const ChatBubble = (props: Props) => {
   const { message } = props
-  const isAI = message.role === 'ai'
+  const isAI = message.role === ROLE.AI
+  const { isLoading, messages } = useMessageStore()
+
+  const isLastAIMessage = isAI && message.id === messages.slice(-1)[0]?.id
+
   return (
     <div key={message.id}>
       <div
@@ -35,7 +41,13 @@ export const ChatBubble = (props: Props) => {
               : 'bg-blue-500 text-white rounded-full px-2 py-1 sm:px-4 sm:py-2'
           )}
         >
-          <Markdown>{message.content as string}</Markdown>
+          {isAI && isLoading && isLastAIMessage ? (
+            <div className="min-w-[200px]">
+              <MessageSkeleton />
+            </div>
+          ) : (
+            <Markdown>{message.content as string}</Markdown>
+          )}
         </div>
       </div>
     </div>

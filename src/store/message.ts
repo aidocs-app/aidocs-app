@@ -4,6 +4,7 @@ import { MessageStore } from '../types/message'
 export const useMessageStore = create<MessageStore>((set) => ({
   messages: [],
   threadId: undefined,
+  isLoading: false,
   upsertMessage: (message) =>
     set((state) => ({
       messages: state.messages.some((m) => m.id === message.id)
@@ -12,4 +13,5 @@ export const useMessageStore = create<MessageStore>((set) => ({
     })),
   setMessages: (messages) => set({ messages }),
   setThreadId: (threadId) => set({ threadId }),
+  setIsLoading: (isLoading) => set({ isLoading }),
 }))

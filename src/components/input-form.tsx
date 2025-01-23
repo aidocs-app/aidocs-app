@@ -11,8 +11,11 @@ import { Button } from './ui/button'
 
 export const InputForm = () => {
   const [input, setInput] = useState('')
-  const { upsertMessage, threadId, setThreadId } = useMessageStore()
+  const { upsertMessage, threadId, setThreadId, setIsLoading } =
+    useMessageStore()
   const handleSubmit = async () => {
+    if (!input.trim()) return
+
     const message = {
       role: ROLE.HUMAN,
       content: input,
@@ -20,18 +23,34 @@ export const InputForm = () => {
     }
     setInput('')
     upsertMessage(message)
+
     const assistantMessageId = generateId()
-    const { value, threadId: newThreadId } = await streamResponse(
-      message,
-      threadId
-    )
-    setThreadId(newThreadId)
-    for await (const chunk of readStreamableValue(value)) {
-      upsertMessage({
-        role: ROLE.AI,
-        content: chunk ?? '',
-        id: assistantMessageId,
-      })
+    upsertMessage({
+      role: ROLE.AI,
+      content: '',
+      id: assistantMessageId,
+    })
+
+    setIsLoading(true)
+
+    try {
+      const { value, threadId: newThreadId } = await streamResponse(
+        message,
+        threadId
+      )
+      setThreadId(newThreadId)
+
+      for await (const chunk of readStreamableValue(value)) {
+        upsertMessage({
+          role: ROLE.AI,
+          content: chunk ?? '',
+          id: assistantMessageId,
+        })
+      }
+    } catch (error) {
+      console.error('Error:', error)
+    } finally {
+      setIsLoading(false)
     }
   }
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {

@@ -11,8 +11,10 @@ export enum ROLE {
 
 export interface MessageStore {
   messages: Message[]
-  threadId: string | undefined
+  threadId?: string
+  isLoading: boolean
   upsertMessage: (message: Message) => void
   setMessages: (messages: Message[]) => void
   setThreadId: (threadId: string) => void
+  setIsLoading: (isLoading: boolean) => void
 }
