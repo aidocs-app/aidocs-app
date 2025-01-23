@@ -4,7 +4,7 @@ import { assistant, langGraphClient } from '@/clients/langgraph'
 import { Message } from '@/types/message'
 import { createStreamableValue } from 'ai/rsc'
 
-export const streamResponse = async (message: Message, threadId?: string) => {
+export const streamResponse = async (messages: Message, threadId?: string) => {
   if (!threadId) {
     const thread = await langGraphClient.threads.create()
     threadId = thread.thread_id
@@ -12,11 +12,12 @@ export const streamResponse = async (message: Message, threadId?: string) => {
   const stream = createStreamableValue('')
 
   ;(async () => {
+    const input = { messages }
     const streamResponse = langGraphClient.runs.stream(
       threadId,
       assistant.assistant_id,
       {
-        input: { messages: [message] },
+        input,
         streamMode: 'events',
       }
     )
