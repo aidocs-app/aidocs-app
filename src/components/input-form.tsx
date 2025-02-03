@@ -41,6 +41,9 @@ export const InputForm = () => {
       setThreadId(newThreadId)
 
       for await (const chunk of readStreamableValue(value)) {
+        if (chunk?.length && chunk?.length > 0) {
+          setIsLoading(false)
+        }
         upsertMessage({
           role: ROLE.AI,
           content: chunk ?? '',
